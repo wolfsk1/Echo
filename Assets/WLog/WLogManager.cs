@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using System.Diagnostics;
 using com.tdb.w;
 using UnityEngine;
@@ -26,5 +27,7 @@ public class WLogManager
         }
     }
 
-    public IWLogHandler LogHandler;
+    private List<IWLogHandler> _logHandlers;
+    
+    //private List<WLogManager> 
 }
