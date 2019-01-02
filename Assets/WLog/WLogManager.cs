@@ -11,8 +11,18 @@ public class WLogManager
         WLogMessage wlm = new WLogMessage(logType, content, tags);
         StackTrace st = new StackTrace(2, true);
         wlm.Trace = st;
+        foreach (var wLogHandler in _logHandlers)
+        {
+            wLogHandler.Log(wlm);
+        }
     }
 
+    private WLogManager()
+    {
+        _logHandlers = new List<IWLogHandler>();
+        _logHandlers.Add(new WLogHandler());
+    }
+    
     private static WLogManager _instance;
     public static WLogManager Instance
     {
@@ -28,6 +38,8 @@ public class WLogManager
     }
 
     private List<IWLogHandler> _logHandlers;
+    
+    private List<IWLogHandler>
     
     //private List<WLogManager> 
 }
