@@ -11,6 +11,7 @@ public class WLogManager
         WLogMessage wlm = new WLogMessage(logType, content, tags);
         StackTrace st = new StackTrace(2, true);
         wlm.Trace = st;
+        _recordLogs.Add(wlm);
         foreach (var wLogHandler in _logHandlers)
         {
             wLogHandler.Log(wlm);
@@ -20,7 +21,7 @@ public class WLogManager
     private WLogManager()
     {
         _logHandlers = new List<IWLogHandler>();
-        _logHandlers.Add(new WLogHandler());
+        _recordLogs = new List<WLogMessage>();
     }
     
     private static WLogManager _instance;
@@ -38,8 +39,6 @@ public class WLogManager
     }
 
     private List<IWLogHandler> _logHandlers;
-    
-    private List<IWLogHandler>
-    
-    //private List<WLogManager> 
+
+    private List<WLogMessage> _recordLogs;
 }
