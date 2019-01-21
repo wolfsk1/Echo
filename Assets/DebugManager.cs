@@ -7,7 +7,7 @@ public class DebugManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		WLog.Log("Hello","Nobody");
+		Echo.Log("Hello","Nobody");
 		StackTrace st = new StackTrace(true);
 		
 	}
