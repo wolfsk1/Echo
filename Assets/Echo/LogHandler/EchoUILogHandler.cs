@@ -6,7 +6,6 @@ namespace com.tdb.echo
     {
         public void Log(EchoMessage message)
         {
-            
         }
 
         private List<EchoMessage> _recordLogList;

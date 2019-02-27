@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace com.tdb.echo
 {
@@ -8,6 +9,11 @@ namespace com.tdb.echo
 		public void Log(EchoMessage message)
 		{
 			Debug.unityLogger.Log(message.Type, message.Content);
+		}
+
+		public IEchoLogHandler GetInstance()
+		{
+			return new EchoUILogHandler();
 		}
 
 	}
