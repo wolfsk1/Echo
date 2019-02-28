@@ -17,8 +17,5 @@ public class Echo {
     {
         EchoManager.Instance.Log(LogType.Log, context, tags);
     }
-    
-    // todo 添加innerlog方法
-
 }
 
