@@ -82,6 +82,7 @@ namespace com.tdb.echo
         
         private EchoManager()
         {
+            
             _logHandlers = new List<IEchoLogHandler>();
         }
         
@@ -122,6 +123,5 @@ namespace com.tdb.echo
             }
         }
 
-        private bool _openUnityLog;
     }
 }

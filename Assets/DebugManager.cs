@@ -7,6 +7,7 @@ public class DebugManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		Echo.Log(EchoConfig.Instance.MaxLogCount.ToString());
 		Echo.Log("Hello","Nobody");
 		StackTrace st = new StackTrace(true);
 		
