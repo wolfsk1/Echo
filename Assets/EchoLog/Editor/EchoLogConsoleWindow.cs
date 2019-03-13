@@ -1,11 +1,12 @@
-﻿using Boo.Lang;
+﻿using System.IO;
+using Boo.Lang;
 using com.tdb.echo;
 using UnityEditor;
 using UnityEngine;
 
 public class EchoLogConsoleWindow : EditorWindow
 {
-    [MenuItem("WLog/LogConsole")]
+    [MenuItem("Echo/OpenLogWindow")]
     public static void Init()
     {
         EchoManager.Instance.GetLogHandler<EchoUILogHandler>();
@@ -13,7 +14,7 @@ public class EchoLogConsoleWindow : EditorWindow
         Rect  wr = new Rect (0,0,500,500);
         EchoLogConsoleWindow window = (EchoLogConsoleWindow)EditorWindow.GetWindowWithRect (typeof (EchoLogConsoleWindow),wr,true,"WLog Console");	
         window.Show();
-        
+
     }
     
     void OnGUI ()

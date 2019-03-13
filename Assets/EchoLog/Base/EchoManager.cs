@@ -40,8 +40,7 @@ namespace com.tdb.echo
             }
             else
             {
-                Log(LogType.Warning, string.Format("try to add log handler:{0} failed.there already has one.", type.ToString()));
-                return null;
+                return GetLogHandler<T>();
             }
             
         }
@@ -53,10 +52,6 @@ namespace com.tdb.echo
             if (result != null)
             {
                 _logHandlers.Remove(result);    
-            }
-            else
-            {
-                Log(LogType.Warning, string.Format("try to remove log handler:{0} failed.there no one.", type.ToString()));
             }
             
         }
@@ -82,8 +77,28 @@ namespace com.tdb.echo
         
         private EchoManager()
         {
-            
             _logHandlers = new List<IEchoLogHandler>();
+            LoadConfig();
+            EchoConfig.Instance.ConfigChanged = LoadConfig;
+        }
+
+        private void LoadConfig()
+        {
+            var config = EchoConfig.Instance;
+            
+            IsOpenUnityLog = config.IsOpenUnityLog;
+            if (config.IsOpenUnityLog)
+            {
+                AddLogHandler<EchoUnityLogHandler>();
+            }
+            else
+            {
+                DeleteLogHandler<EchoUnityLogHandler>();
+            }
+
+            MaxLogCount = config.MaxLogCount;
+
+
         }
         
         private static EchoManager _instance;
@@ -103,25 +118,9 @@ namespace com.tdb.echo
 
         private List<IEchoLogHandler> _logHandlers;
 
-        public bool OpenUnityLog
-        {
-            get { return _openUnityLog; }
-            set
-            {
-                if (value == _openUnityLog) return;
-                if (value)
-                {
-                    AddLogHandler<EchoUnityLogHandler>();
-                }
-                else
-                {
-                    DeleteLogHandler<EchoUnityLogHandler>();
-                }
+        public bool IsOpenUnityLog{get;private set;}
 
-                _openUnityLog = value;
-
-            }
-        }
+        public int MaxLogCount { get; private set; }
 
     }
 }

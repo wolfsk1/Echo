@@ -13,7 +13,7 @@ namespace com.tdb.echo
 
 		public IEchoLogHandler GetInstance()
 		{
-			return new EchoUILogHandler();
+			return new EchoUnityLogHandler();
 		}
 
 	}
