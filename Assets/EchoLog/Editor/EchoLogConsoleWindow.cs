@@ -11,8 +11,7 @@ public class EchoLogConsoleWindow : EditorWindow
     {
         EchoManager.Instance.GetLogHandler<EchoUILogHandler>();
         //创建窗口
-        Rect  wr = new Rect (0,0,500,500);
-        EchoLogConsoleWindow window = (EchoLogConsoleWindow)EditorWindow.GetWindowWithRect (typeof (EchoLogConsoleWindow),wr,true,"WLog Console");	
+        EchoLogConsoleWindow window = (EchoLogConsoleWindow)GetWindow(typeof (EchoLogConsoleWindow),false,"WLog Console");
         window.Show();
 
     }
@@ -20,10 +19,40 @@ public class EchoLogConsoleWindow : EditorWindow
     void OnGUI ()
     {
 //        EditorGUILayout.BeginScrollView(new Vector2(0, 0), true, false);
-        EditorGUILayout.BeginVertical();
-        _filterSelected = GUILayout.Toolbar(_filterSelected, tests.ToArray());
-        
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.BeginVertical(new GUILayoutOption[]{GUILayout.Width(200)});
+        GUILayout.Label("Fliter List");
+        GUILayout.BeginScrollView(new Vector2(0, 0),GUILayout.MaxWidth(200),GUILayout.MaxHeight(100));
+        if (GUILayout.Button("Add Fliter"))
+        {
+            
+        }
+        if (GUILayout.Button("Add Fliter"))
+        {
+            
+        }
+        if (GUILayout.Button("Add Fliter"))
+        {
+            
+        }
+        if (GUILayout.Button("Add Fliter"))
+        {
+            
+        }
+        EditorGUILayout.EndScrollView();
+        if (GUILayout.Button("Add Fliter"))
+        {
+            
+        }
         EditorGUILayout.EndVertical();
+        EditorGUILayout.BeginVertical();
+        EditorGUILayout.BeginHorizontal();
+        _isShowError = GUILayout.Toggle(_isShowError, "Error", EditorStyles.toolbarButton);
+        _isShowLog = GUILayout.Toggle(_isShowLog, "Log", EditorStyles.toolbarButton);
+        _isShowWarning = GUILayout.Toggle(_isShowWarning, "Warning", EditorStyles.toolbarButton);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.EndVertical();
+        EditorGUILayout.EndHorizontal();
 //        //输入框控件
 //        text = EditorGUILayout.TextField("输入文字:",text);
 // 
@@ -71,4 +100,8 @@ public class EchoLogConsoleWindow : EditorWindow
 
     private int _filterSelected = 0;
     private int _lastSelectedFilter = 0;
+
+    private bool _isShowWarning;
+    private bool _isShowLog;
+    private bool _isShowError;
 }
