@@ -11,97 +11,112 @@ public class EchoLogConsoleWindow : EditorWindow
     {
         EchoManager.Instance.GetLogHandler<EchoUILogHandler>();
         //创建窗口
-        EchoLogConsoleWindow window = (EchoLogConsoleWindow)GetWindow(typeof (EchoLogConsoleWindow),false,"WLog Console");
+        EchoLogConsoleWindow window =
+            (EchoLogConsoleWindow) GetWindow(typeof(EchoLogConsoleWindow), false, "WLog Console");
         window.Show();
-
     }
-    
-    void OnGUI ()
+
+    void OnGUI()
     {
-//        EditorGUILayout.BeginScrollView(new Vector2(0, 0), true, false);
+        var windowsHeight = position.height;
+        var windowsWidth = position.width;
+        // 整体布局
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.BeginVertical(new GUILayoutOption[]{GUILayout.Width(200)});
-        GUILayout.Label("Fliter List");
-        GUILayout.BeginScrollView(new Vector2(0, 0),GUILayout.MaxWidth(200),GUILayout.MaxHeight(100));
+
+        _DrawLeftGroupView(windowsHeight);
+
+        _DrawRightGroupView(windowsHeight, windowsWidth - _leftGroupWidth);
+
+        
+        EditorGUILayout.EndHorizontal();
+    }
+
+    private void _DrawLeftGroupView(float windowsHeight)
+    {
+        // left
+        EditorGUILayout.BeginVertical(GUILayout.Width(_leftGroupWidth));
+        
+        // Header
+        EditorGUILayout.BeginHorizontal(GUILayout.Height(_headerHeight));
+        
+        GUILayout.Label("Fliter List:");
+        
         if (GUILayout.Button("Add Fliter"))
         {
-            
         }
+
+        EditorGUILayout.EndHorizontal();
+
+        // scroll view
+        float scrollViewHeight = windowsHeight - _headerHeight;
+        _filterListScrollViewPosition = GUILayout.BeginScrollView(_filterListScrollViewPosition,
+            GUILayout.Height(scrollViewHeight));
+
+        // filter List content
         if (GUILayout.Button("Add Fliter"))
         {
-            
         }
-        if (GUILayout.Button("Add Fliter"))
-        {
-            
-        }
-        if (GUILayout.Button("Add Fliter"))
-        {
-            
-        }
+        // scroll view end
         EditorGUILayout.EndScrollView();
-        if (GUILayout.Button("Add Fliter"))
+
+        // left end
+        EditorGUILayout.EndVertical();
+    }
+
+    private void _DrawRightGroupView(float windowsHeight, float groupWidth)
+    {
+        // right
+        EditorGUILayout.BeginVertical();
+        
+        // header
+        EditorGUILayout.BeginHorizontal(GUILayout.Height(_headerHeight));
+        
+        GUILayout.Space(groupWidth - _rightGroupHeaderButtonWidth * 4 - _separatorLength);
+        if (GUILayout.Button("Clear", EditorStyles.toolbarButton))
         {
             
         }
-        EditorGUILayout.EndVertical();
-        EditorGUILayout.BeginVertical();
-        EditorGUILayout.BeginHorizontal();
-        _isShowError = GUILayout.Toggle(_isShowError, "Error", EditorStyles.toolbarButton);
-        _isShowLog = GUILayout.Toggle(_isShowLog, "Log", EditorStyles.toolbarButton);
-        _isShowWarning = GUILayout.Toggle(_isShowWarning, "Warning", EditorStyles.toolbarButton);
+        GUILayout.Space(_separatorLength);
+        _isShowError = GUILayout.Toggle(_isShowError, "Error", EditorStyles.toolbarButton, GUILayout.Width(_rightGroupHeaderButtonWidth));
+        _isShowLog = GUILayout.Toggle(_isShowLog, "Log", EditorStyles.toolbarButton, GUILayout.Width(_rightGroupHeaderButtonWidth));
+        _isShowWarning = GUILayout.Toggle(_isShowWarning, "Warning", EditorStyles.toolbarButton, GUILayout.Width(_rightGroupHeaderButtonWidth));
+
+        // header end
         EditorGUILayout.EndHorizontal();
+        
+        // scroll view
+        float scrollViewHeight = windowsHeight - _headerHeight;
+        _logListScrollViewPosition = GUILayout.BeginScrollView(_logListScrollViewPosition,
+            GUILayout.Height(scrollViewHeight));
+
+        // filter List content
+        if (GUILayout.Button("Add Fliter"))
+        {
+        }
+        // scroll view end
+        EditorGUILayout.EndScrollView();
+        
+        // right end
         EditorGUILayout.EndVertical();
-        EditorGUILayout.EndHorizontal();
-//        //输入框控件
-//        text = EditorGUILayout.TextField("输入文字:",text);
-// 
-//        if(GUILayout.Button("打开通知",GUILayout.Width(200)))
-//        {
-//            //打开一个通知栏
-//            this.ShowNotification(new GUIContent("This is a Notification"));
-//        }
-// 
-//        if(GUILayout.Button("关闭通知",GUILayout.Width(200)))
-//        {
-//            //关闭通知栏
-//            this.RemoveNotification();
-//        }
-// 
-//        //文本框显示鼠标在窗口的位置
-//        EditorGUILayout.LabelField ("鼠标在窗口的位置", Event.current.mousePosition.ToString ());
-// 
-//        //选择贴图
-//        texture =  EditorGUILayout.ObjectField("添加贴图",texture,typeof(Texture),true) as Texture;
-// 
-//        if(GUILayout.Button("关闭窗口",GUILayout.Width(200)))
-//        {
-//            //关闭窗口
-//            this.Close();
-//        }
- 
     }
 
-    private void _handleTabSwitch()
-    {
-        if (_filterSelected != _lastSelectedFilter)
-        {
-            // do sth
-            _lastSelectedFilter = _filterSelected;
-        }
-        if (_filterSelected == tests.Count - 1)
-        {
-            tests.Insert(tests.Count - 1, tests.Count.ToString());
-            _filterSelected = tests.Count - 2;
-        }
-    }
+    private readonly float _headerHeight = 30f;
+
+    private readonly float _separatorLength = 5f;
+    // left group param
+    private readonly float _leftGroupWidth = 200f;
     
-    public List<string> tests = new List<string>(){"default","+"};
 
-    private int _filterSelected = 0;
-    private int _lastSelectedFilter = 0;
-
+    // right group param
+    private readonly float _rightGroupHeaderButtonWidth = 80f;
+    
+    
+    // Log Level Button
     private bool _isShowWarning;
     private bool _isShowLog;
     private bool _isShowError;
+
+    private Vector2 _filterListScrollViewPosition = new Vector2(0, 0);
+    
+    private Vector2 _logListScrollViewPosition = new Vector2(0, 0);
 }
