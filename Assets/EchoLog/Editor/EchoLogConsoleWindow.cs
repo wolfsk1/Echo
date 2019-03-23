@@ -13,28 +13,35 @@ public class EchoLogConsoleWindow : EditorWindow
         //创建窗口
         EchoLogConsoleWindow window =
             (EchoLogConsoleWindow) GetWindow(typeof(EchoLogConsoleWindow), false, "WLog Console");
+        window._init();
         window.Show();
     }
 
+    private void _init()
+    {
+        _midSplitView = new EditorGUISplitView(EditorGUISplitView.Direction.Horizontal);
+    }
     void OnGUI()
     {
+        
         var windowsHeight = position.height;
         var windowsWidth = position.width;
         // 整体布局
-        EditorGUILayout.BeginHorizontal();
-
-        _DrawLeftGroupView(windowsHeight);
-
-        _DrawRightGroupView(windowsHeight, windowsWidth - _leftGroupWidth);
-
+        _midSplitView.BeginSplitView();
         
-        EditorGUILayout.EndHorizontal();
+        _DrawLeftGroupView(windowsHeight);
+        
+        _midSplitView.Split();
+        
+        _DrawRightGroupView(windowsHeight, windowsWidth - _midSpliterPos - _spliterWidth);
+
+        _midSplitView.EndSplitView();
     }
 
     private void _DrawLeftGroupView(float windowsHeight)
     {
         // left
-        EditorGUILayout.BeginVertical(GUILayout.Width(_leftGroupWidth));
+        EditorGUILayout.BeginVertical(GUILayout.Width(_midSpliterPos));
         
         // Header
         EditorGUILayout.BeginHorizontal(GUILayout.Height(_headerHeight));
@@ -50,6 +57,7 @@ public class EchoLogConsoleWindow : EditorWindow
         // scroll view
         float scrollViewHeight = windowsHeight - _headerHeight;
         _filterListScrollViewPosition = GUILayout.BeginScrollView(_filterListScrollViewPosition,
+            EditorStyles.helpBox,
             GUILayout.Height(scrollViewHeight));
 
         // filter List content
@@ -83,10 +91,10 @@ public class EchoLogConsoleWindow : EditorWindow
 
         // header end
         EditorGUILayout.EndHorizontal();
-        
         // scroll view
         float scrollViewHeight = windowsHeight - _headerHeight;
         _logListScrollViewPosition = GUILayout.BeginScrollView(_logListScrollViewPosition,
+            EditorStyles.helpBox,
             GUILayout.Height(scrollViewHeight));
 
         // filter List content
@@ -100,12 +108,22 @@ public class EchoLogConsoleWindow : EditorWindow
         EditorGUILayout.EndVertical();
     }
 
+    private void _DrawSplitter()
+    {
+        EditorGUILayout.Separator();
+//        GUILayout.Box ("", 
+//            GUILayout.Width(_spliterWidth), 
+//            GUILayout.MaxWidth (_spliterWidth), 
+//            GUILayout.MinWidth(_spliterWidth),
+//            GUILayout.ExpandHeight(true));
+        //splitterRect = GUILayoutUtility.GetLastRect ();
+    }
+    
     private readonly float _headerHeight = 30f;
 
     private readonly float _separatorLength = 5f;
-    // left group param
-    private readonly float _leftGroupWidth = 200f;
-    
+
+    private readonly float _spliterWidth = 5f;
 
     // right group param
     private readonly float _rightGroupHeaderButtonWidth = 80f;
@@ -116,7 +134,11 @@ public class EchoLogConsoleWindow : EditorWindow
     private bool _isShowLog;
     private bool _isShowError;
 
+    private float _midSpliterPos = 200f;
+    
     private Vector2 _filterListScrollViewPosition = new Vector2(0, 0);
     
     private Vector2 _logListScrollViewPosition = new Vector2(0, 0);
+
+    private EditorGUISplitView _midSplitView;
 }
