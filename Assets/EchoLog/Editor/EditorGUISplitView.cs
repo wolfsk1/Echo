@@ -16,20 +16,21 @@ public class EditorGUISplitView
 	public EditorGUISplitView(Direction splitDirection) {
 		_splitNormalizedPosition = 0.5f;
 		_splitDirection = splitDirection;
+		_availableRect = new Rect();
 
 	}
 
-	public void BeginSplitView() {
-		Rect tempRect;
+	public void BeginSplitView(float width, float height)
+	{
 
+		_availableRect.width = width;
+		_availableRect.height = height;
 		if(_splitDirection == Direction.Horizontal)
-			tempRect = EditorGUILayout.BeginHorizontal (GUILayout.ExpandWidth(true));
+			EditorGUILayout.BeginHorizontal (GUILayout.Width(width));
 		else 
-			tempRect = EditorGUILayout.BeginVertical (GUILayout.ExpandHeight(true));
+			EditorGUILayout.BeginVertical (GUILayout.Height(height));
+
 		
-		if (tempRect.width > 0.0f) {
-			_availableRect = tempRect;
-		}
 		if(_splitDirection == Direction.Horizontal)
 			_scrollPosition = GUILayout.BeginScrollView(_scrollPosition, GUILayout.Width(_availableRect.width * _splitNormalizedPosition));
 		else

@@ -27,7 +27,7 @@ public class EchoLogConsoleWindow : EditorWindow
         var windowsHeight = position.height;
         var windowsWidth = position.width;
         // 整体布局
-        _midSplitView.BeginSplitView();
+        _midSplitView.BeginSplitView(windowsWidth, windowsHeight);
         
         _DrawLeftGroupView(windowsHeight);
         
