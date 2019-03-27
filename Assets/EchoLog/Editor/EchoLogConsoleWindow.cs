@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Boo.Lang;
 using com.tdb.echo;
+using EchoLog.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,23 +20,20 @@ public class EchoLogConsoleWindow : EditorWindow
 
     private void _init()
     {
-        _midSplitView = new EditorGUISplitView(EditorGUISplitView.Direction.Horizontal);
+        _midSplitView = new EditorHorizontalSplitView();
+        _midSplitView.Init(this, _OnMidResize);
     }
     void OnGUI()
     {
-        
         var windowsHeight = position.height;
         var windowsWidth = position.width;
-        // 整体布局
-        _midSplitView.BeginSplitView(windowsWidth, windowsHeight);
-        
+        EditorGUILayout.BeginHorizontal();
         _DrawLeftGroupView(windowsHeight);
         
-        _midSplitView.Split();
+        _midSplitView.Split(windowsWidth, windowsHeight);
         
-        _DrawRightGroupView(windowsHeight, windowsWidth - _midSpliterPos - _spliterWidth);
-
-        _midSplitView.EndSplitView();
+        _DrawRightGroupView();
+        EditorGUILayout.EndHorizontal();
     }
 
     private void _DrawLeftGroupView(float windowsHeight)
@@ -48,7 +46,7 @@ public class EchoLogConsoleWindow : EditorWindow
         
         GUILayout.Label("Fliter List:");
         
-        if (GUILayout.Button("Add Fliter"))
+        if (GUILayout.Button("Add Fliter",GUILayout.Width(_rightGroupHeaderButtonWidth)))
         {
         }
 
@@ -71,20 +69,19 @@ public class EchoLogConsoleWindow : EditorWindow
         EditorGUILayout.EndVertical();
     }
 
-    private void _DrawRightGroupView(float windowsHeight, float groupWidth)
+    private void _DrawRightGroupView()
     {
         // right
-        EditorGUILayout.BeginVertical();
+        EditorGUILayout.BeginVertical(GUILayout.ExpandWidth(true));
         
         // header
         EditorGUILayout.BeginHorizontal(GUILayout.Height(_headerHeight));
         
-        GUILayout.Space(groupWidth - _rightGroupHeaderButtonWidth * 4 - _separatorLength);
-        if (GUILayout.Button("Clear", EditorStyles.toolbarButton))
+        if (GUILayout.Button("Clear", EditorStyles.toolbarButton, GUILayout.Width(_rightGroupHeaderButtonWidth)))
         {
             
         }
-        GUILayout.Space(_separatorLength);
+        GUILayout.FlexibleSpace();
         _isShowError = GUILayout.Toggle(_isShowError, "Error", EditorStyles.toolbarButton, GUILayout.Width(_rightGroupHeaderButtonWidth));
         _isShowLog = GUILayout.Toggle(_isShowLog, "Log", EditorStyles.toolbarButton, GUILayout.Width(_rightGroupHeaderButtonWidth));
         _isShowWarning = GUILayout.Toggle(_isShowWarning, "Warning", EditorStyles.toolbarButton, GUILayout.Width(_rightGroupHeaderButtonWidth));
@@ -92,10 +89,9 @@ public class EchoLogConsoleWindow : EditorWindow
         // header end
         EditorGUILayout.EndHorizontal();
         // scroll view
-        float scrollViewHeight = windowsHeight - _headerHeight;
         _logListScrollViewPosition = GUILayout.BeginScrollView(_logListScrollViewPosition,
             EditorStyles.helpBox,
-            GUILayout.Height(scrollViewHeight));
+            GUILayout.ExpandHeight(true));
 
         // filter List content
         if (GUILayout.Button("Add Fliter"))
@@ -108,15 +104,9 @@ public class EchoLogConsoleWindow : EditorWindow
         EditorGUILayout.EndVertical();
     }
 
-    private void _DrawSplitter()
+    private void _OnMidResize(float x)
     {
-        EditorGUILayout.Separator();
-//        GUILayout.Box ("", 
-//            GUILayout.Width(_spliterWidth), 
-//            GUILayout.MaxWidth (_spliterWidth), 
-//            GUILayout.MinWidth(_spliterWidth),
-//            GUILayout.ExpandHeight(true));
-        //splitterRect = GUILayoutUtility.GetLastRect ();
+        _midSpliterPos = x;
     }
     
     private readonly float _headerHeight = 30f;
@@ -140,5 +130,5 @@ public class EchoLogConsoleWindow : EditorWindow
     
     private Vector2 _logListScrollViewPosition = new Vector2(0, 0);
 
-    private EditorGUISplitView _midSplitView;
+    private BaseSplitView _midSplitView;
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEditor;
+using UnityEngine.Events;
 
 public class EditorGUISplitView
 {
@@ -13,11 +14,10 @@ public class EditorGUISplitView
 
 
 
-	public EditorGUISplitView(Direction splitDirection) {
-		_splitNormalizedPosition = 0.5f;
+	public EditorGUISplitView(Direction splitDirection, UnityAction<float> onSplitViewMove) {
 		_splitDirection = splitDirection;
-		_availableRect = new Rect();
-
+		_currentPos = 0;
+		_onResize = onSplitViewMove;
 	}
 
 	public void BeginSplitView(float width, float height)
@@ -42,6 +42,44 @@ public class EditorGUISplitView
 		ResizeSplitFirstView ();
 	}
 
+	public void Split(float totalWidth, float totalHeight)
+	{
+		if (!_isSplitRectInit)
+		{
+			if (_splitDirection == Direction.Horizontal)
+			{
+				_splitRect = new Rect(totalWidth*.5f,0f,4f,totalHeight);
+			}
+			else
+			{
+				_splitRect = new Rect(0f, totalHeight * .5f, totalWidth, 4f);
+			}
+			_isSplitRectInit = true;
+			
+		}
+		if(_splitDirection == Direction.Horizontal)
+			EditorGUIUtility.AddCursorRect(_resizeHandlerRect,MouseCursor.ResizeHorizontal);
+		else
+			EditorGUIUtility.AddCursorRect(_resizeHandlerRect,MouseCursor.ResizeVertical);
+		if (_resize)
+		{
+			
+		}
+		else
+		{
+			_totalHeight = totalHeight;
+			_totalWidth = totalWidth;
+			
+		}
+		
+		
+	}
+
+	private void _InvokeResize()
+	{
+		//if(_splitDirection)
+	}
+	
 	public void EndSplitView() {
 
 		if(_splitDirection == Direction.Horizontal)
@@ -52,13 +90,13 @@ public class EditorGUISplitView
 
 	private void ResizeSplitFirstView()
 	{
-		if (!_isResizeHandlerRectInit)
+		if (!_isSplitRectInit)
 		{
 			if(_splitDirection == Direction.Horizontal)
 				_resizeHandlerRect = new Rect (_availableRect.width * _splitNormalizedPosition, _availableRect.y, 2f, _availableRect.height);
 			else
 				_resizeHandlerRect = new Rect (_availableRect.x,_availableRect.height * _splitNormalizedPosition, _availableRect.width, 2f);
-			_isResizeHandlerRectInit = true;
+			_isSplitRectInit = true;
 		}
 		
 		if (_splitDirection == Direction.Horizontal)
@@ -89,11 +127,15 @@ public class EditorGUISplitView
 	}
 	
 	private readonly Direction _splitDirection;
+	private float _totalWidth, _totalHeight, _currentPos;
 	private float _splitNormalizedPosition;
+	private Rect _splitRect;
+	private UnityAction<float> _onResize;
+	
 	private bool _resize;
 	private Vector2 _scrollPosition;
 	private Rect _availableRect;
 	private Rect _resizeHandlerRect;
-	private bool _isResizeHandlerRectInit = false;
+	private bool _isSplitRectInit = false;
 }
 
