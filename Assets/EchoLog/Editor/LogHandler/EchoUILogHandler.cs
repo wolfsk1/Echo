@@ -65,7 +65,7 @@ namespace com.tdb.echo
         
         private List<EchoMessage> _recordLogList;
 
-        private List<EchoFliter> _fliters;
+        private List<EchoFilter> _fliters;
 
         private string _echoEditorConfigFloderPath;
     }

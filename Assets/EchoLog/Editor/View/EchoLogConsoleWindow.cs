@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace com.tdb.echo
@@ -13,7 +14,7 @@ namespace com.tdb.echo
             EchoManager.Instance.GetLogHandler<EchoUILogHandler>();
             //创建窗口
             var window =
-                (EchoLogConsoleWindow) GetWindow(typeof(EchoLogConsoleWindow), false, "WLog Console");
+                (EchoLogConsoleWindow) GetWindow(typeof(EchoLogConsoleWindow), false, "Echo Console");
             window.minSize = new Vector2(300f, 150f);
             window.Show();
         }
@@ -54,6 +55,10 @@ namespace com.tdb.echo
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Add Fliter"))
             {
+                AddFliterWindow.Open((filter) =>
+                {
+                    _filters.Add(filter);
+                });
             }
 
             EditorGUILayout.Space();
@@ -64,9 +69,9 @@ namespace com.tdb.echo
                 EditorStyles.helpBox,
                 GUILayout.ExpandHeight(true));
 
-            // filter List content
-            if (GUILayout.Button("Add Fliter"))
+            foreach (var filter in _filters)
             {
+                FilterItemView.Draw(filter);
             }
 
             // scroll view end
@@ -138,6 +143,8 @@ namespace com.tdb.echo
         }
         
         private readonly float _headerHeight = 30f;
+        
+        private List<EchoFilter> _filters = new List<EchoFilter>();
 
         // right group param
         private readonly float _rightGroupHeaderButtonWidth = 80f;
