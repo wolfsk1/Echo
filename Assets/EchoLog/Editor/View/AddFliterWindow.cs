@@ -12,7 +12,12 @@ namespace com.tdb.echo
             
         }
 
-        public static void Open(EchoFilter filter, UnityAction<EchoFilter> onComplete)
+        public static void Edit(EchoFilter filter)
+        {
+            Open(filter, null);
+        }
+        
+        private static void Open(EchoFilter filter, UnityAction<EchoFilter> onComplete)
         {
             var window =
                 (AddFliterWindow) GetWindow(typeof(AddFliterWindow), false, "Echo Filter");
@@ -45,7 +50,10 @@ namespace com.tdb.echo
             {
                 _filter.SetTags(_tagString);
                 _filter.Name = _name;
-                _onComplete.Invoke(_filter);
+                if (_onComplete != null)
+                {
+                    _onComplete.Invoke(_filter);    
+                }
                 Close();
             }
             EditorGUILayout.EndHorizontal();

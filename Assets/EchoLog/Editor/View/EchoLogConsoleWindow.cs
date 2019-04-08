@@ -19,6 +19,11 @@ namespace com.tdb.echo
             window.Show();
         }
 
+        public void SetFilterDeleteFlag(int index)
+        {
+            
+        }
+
         private void OnGUI()
         {
             if (_midSplitView == null)
@@ -53,6 +58,15 @@ namespace com.tdb.echo
 
             GUILayout.Label("Fliter List:");
             GUILayout.FlexibleSpace();
+            
+            if (GUILayout.Button("Load Fliter"))
+            {
+                AddFliterWindow.Open((filter) =>
+                {
+                    _filters.Add(filter);
+                });
+            }
+            
             if (GUILayout.Button("Add Fliter"))
             {
                 AddFliterWindow.Open((filter) =>
@@ -69,10 +83,7 @@ namespace com.tdb.echo
                 EditorStyles.helpBox,
                 GUILayout.ExpandHeight(true));
 
-            foreach (var filter in _filters)
-            {
-                FilterItemView.Draw(filter);
-            }
+            FilterListView.Draw(ref _filters, ref _currentSelectedFilterIndex);
 
             // scroll view end
             EditorGUILayout.EndScrollView();
@@ -146,6 +157,7 @@ namespace com.tdb.echo
         
         private List<EchoFilter> _filters = new List<EchoFilter>();
 
+        private int _currentSelectedFilterIndex = 0;
         // right group param
         private readonly float _rightGroupHeaderButtonWidth = 80f;
 
