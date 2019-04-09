@@ -11,11 +11,12 @@ namespace com.tdb.echo
         [MenuItem("Echo/OpenLogWindow")]
         public static void Init()
         {
-            EchoManager.Instance.GetLogHandler<EchoUILogHandler>();
             //创建窗口
             var window =
                 (EchoLogConsoleWindow) GetWindow(typeof(EchoLogConsoleWindow), false, "Echo Console");
             window.minSize = new Vector2(300f, 150f);
+            window._logHandler = EchoManager.Instance.GetLogHandler<EchoUILogHandler>();
+            window._logHandler.LoadDefaultFilter();
             window.Show();
         }
 
@@ -61,17 +62,14 @@ namespace com.tdb.echo
             
             if (GUILayout.Button("Load Fliter"))
             {
-                AddFliterWindow.Open((filter) =>
-                {
-                    _filters.Add(filter);
-                });
+                
             }
             
             if (GUILayout.Button("Add Fliter"))
             {
                 AddFliterWindow.Open((filter) =>
                 {
-                    _filters.Add(filter);
+                    _logHandler.GetFilterList().Add(filter);
                 });
             }
 
@@ -83,7 +81,7 @@ namespace com.tdb.echo
                 EditorStyles.helpBox,
                 GUILayout.ExpandHeight(true));
 
-            FilterListView.Draw(ref _filters, ref _currentSelectedFilterIndex);
+            FilterListView.Draw(_logHandler, ref _currentSelectedFilterIndex);
 
             // scroll view end
             EditorGUILayout.EndScrollView();
@@ -155,8 +153,6 @@ namespace com.tdb.echo
         
         private readonly float _headerHeight = 30f;
         
-        private List<EchoFilter> _filters = new List<EchoFilter>();
-
         private int _currentSelectedFilterIndex = 0;
         // right group param
         private readonly float _rightGroupHeaderButtonWidth = 80f;
@@ -171,6 +167,7 @@ namespace com.tdb.echo
 
         private bool _needRepaint = true;
 
+        private EchoUILogHandler _logHandler;
 
         // Log Level Button
         private bool _isShowError,_isShowLog, _isShowWarning;

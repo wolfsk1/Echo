@@ -8,65 +8,54 @@ namespace com.tdb.echo
 {
     public class EchoUILogHandler : IEchoLogHandler
     {
-        public EchoUILogHandler()
+        public void Log(EchoLogMessage logMessage)
         {
-            if (string.IsNullOrEmpty(_echoEditorConfigFloderPath)||!Directory.Exists(_echoEditorConfigFloderPath))
+            _recordLogList.Add(logMessage);
+        }
+
+        public List<EchoFilter> GetFilterList()
+        {
+            if (_filters == null)
             {
-                _echoEditorConfigFloderPath = _FindEchoPath();
-                if (_echoEditorConfigFloderPath == null)
-                {
-                    Echo.LogError("Can`t Find Floder 'EchoLog'.Please rename echo root floder name to 'EchoLog'");
-                    return;
-                }
+                _filters = new List<EchoFilter>();
             }
-            
-            
+            return _filters;
         }
         
-        private static string _FindEchoPath()
-        {
-            string result = _FindFloder(Application.dataPath, "EchoLog"); 
-            return result;
-        }
-
-        private static string _FindFloder(string rootPath, string floderName)
-        {
-            var paths = Directory.GetDirectories(rootPath);
-            foreach (var childPath in paths)
-            {
-                string result = null;
-                if (childPath.EndsWith(floderName))
-                {
-                    result = childPath;
-                }
-                else
-                {
-                    result = _FindFloder(childPath, floderName);
-                }
-
-                if (result != null)
-                {
-                    return result;
-                }
-            }
-
-            return null;
-        }
-        public void Log(EchoMessage message)
-        {
-            _recordLogList.Add(message);
-        }
+        
         
         public void ClearAll()
         {
             
         }
-        
-        
-        private List<EchoMessage> _recordLogList;
 
-        private List<EchoFilter> _fliters;
+        public void LoadDefaultFilter()
+        {
+            string echoRootPath = EchoEditorUtil.GetEchoRootPath();
+            if (AssetDatabase.IsValidFolder(echoRootPath))
+            {
+                string defaultFilterFolderPath = echoRootPath+"/Editor/DefaultEchoFilter";
+                if (!AssetDatabase.IsValidFolder(defaultFilterFolderPath))
+                {
+                    AssetDatabase.CreateFolder(echoRootPath+"/Editor", "DefaultEchoFilter");
+                }
 
-        private string _echoEditorConfigFloderPath;
+                var assetPaths = AssetDatabase.FindAssets("t:EchoFilter",new string[]{defaultFilterFolderPath});
+                var filters = GetFilterList();
+                foreach (var assetPath in assetPaths)
+                {
+                    var filter = AssetDatabase.LoadAssetAtPath<EchoFilter>(AssetDatabase.GUIDToAssetPath(assetPath));
+                    if (filter != null && !filters.Contains(filter))
+                    {
+                        filters.Add(filter);
+                    }
+                }
+            }
+        }
+
+        private List<EchoLogMessage> _recordLogList;
+
+        private List<EchoFilter> _filters;
+
     }
 }

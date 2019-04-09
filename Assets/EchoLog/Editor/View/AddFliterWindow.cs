@@ -8,6 +8,7 @@ namespace com.tdb.echo
     {
         public static void Open(UnityAction<EchoFilter> onComplete)
         {
+            FocusWindowIfItsOpen(typeof(AddFliterWindow));
             Open(CreateInstance<EchoFilter>(), onComplete);
             
         }

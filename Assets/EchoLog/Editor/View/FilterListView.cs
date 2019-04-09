@@ -7,8 +7,9 @@ namespace com.tdb.echo
 {
     public class FilterListView
     {
-        public static void Draw(ref List<EchoFilter> filters, ref int selectedIndex)
+        public static void Draw(EchoUILogHandler logHandler, ref int selectedIndex)
         {
+            var filters = logHandler.GetFilterList();
             int i = 0;
             while (i < filters.Count)
             {

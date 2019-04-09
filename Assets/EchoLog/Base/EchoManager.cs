@@ -9,7 +9,7 @@ namespace com.tdb.echo
     {
         public void Log(LogType logType, string content, params string[] tags)
         {
-            EchoMessage wlm = new EchoMessage(logType, content, tags);
+            EchoLogMessage wlm = new EchoLogMessage(logType, content, tags);
             StackTrace st = new StackTrace(2, true);
             wlm.Trace = st;
             int i = 0;
@@ -79,7 +79,6 @@ namespace com.tdb.echo
         {
             _logHandlers = new List<IEchoLogHandler>();
             LoadConfig();
-            EchoConfig.Instance.ConfigChanged = LoadConfig;
         }
 
         private void LoadConfig()
@@ -97,9 +96,9 @@ namespace com.tdb.echo
             }
 
             MaxLogCount = config.MaxLogCount;
-
-
         }
+        
+        
         
         private static EchoManager _instance;
 

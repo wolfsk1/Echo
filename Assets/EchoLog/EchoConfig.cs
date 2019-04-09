@@ -8,45 +8,12 @@ public class EchoConfig : ScriptableObject
     /// <summary>
     /// is open unity default logger.
     /// </summary>
-    public bool IsOpenUnityLog
-    {
-        get { return _isOpenUnityLog; }
-        set
-        {
-            if (value != _isOpenUnityLog)
-            {
-                _isOpenUnityLog = value;
-                if (ConfigChanged != null)
-                {
-                    ConfigChanged.Invoke();
-                }
-            }
-        }
-    }
-    private bool _isOpenUnityLog = true;
+    public bool IsOpenUnityLog = true;
     /// <summary>
     /// Max log count.-1 mean 
     /// </summary>
-    public int MaxLogCount
-    {
-        get { return _maxLogCount; }
-        set
-        {
-            if (value != _maxLogCount)
-            {
-                _maxLogCount = value;
-                if (ConfigChanged != null)
-                {
-                    ConfigChanged.Invoke();
-                }
-            }
-        }
-    }
-
-    private int _maxLogCount = -1;
+    public int MaxLogCount = -1;
     
-    public UnityAction ConfigChanged;
-
     private static EchoConfig _instance;
     
     public static EchoConfig Instance

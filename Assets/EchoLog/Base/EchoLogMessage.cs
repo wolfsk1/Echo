@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace com.tdb.echo
 {
-    public struct EchoMessage
+    public struct EchoLogMessage
     {
-        public EchoMessage(LogType type, string content, params string[] tags)
+        public EchoLogMessage(LogType type, string content, params string[] tags)
         {
             Type = type;
             Content = content;
