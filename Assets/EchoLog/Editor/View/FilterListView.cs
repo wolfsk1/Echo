@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.Events;
 
 namespace com.tdb.echo
@@ -9,6 +10,7 @@ namespace com.tdb.echo
     {
         public static void Draw(EchoUILogHandler logHandler, ref int selectedIndex)
         {
+            if (logHandler == null) return;
             var filters = logHandler.GetFilterList();
             int i = 0;
             while (i < filters.Count)
@@ -25,12 +27,18 @@ namespace com.tdb.echo
                 else
                 {
                     EditorGUILayout.BeginHorizontal();
-
-                    if (GUILayout.Toggle(i == selectedIndex, filter.Name))
+                    bool isSelected = i == selectedIndex;
+                    if (isSelected)
                     {
-                        selectedIndex = i;
+                        GUILayout.Label(filter.Name);
                     }
-
+                    else
+                    {
+                        if (GUILayout.Button(filter.Name))
+                        {
+                            selectedIndex = i;
+                        }
+                    }
                     if (GUILayout.Button("Edit", GUILayout.Width(50)))
                     {
                         AddFliterWindow.Edit(filter);
