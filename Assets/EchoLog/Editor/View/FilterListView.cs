@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using com.tdb.echo.Utils;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
@@ -26,36 +27,40 @@ namespace com.tdb.echo
                 }
                 else
                 {
-                    EditorGUILayout.BeginHorizontal();
-                    bool isSelected = i == selectedIndex;
-                    if (isSelected)
+                    Rect box = EditorGUILayout.BeginHorizontal();
                     {
-                        GUILayout.Label(filter.Name);
-                    }
-                    else
-                    {
-                        if (GUILayout.Button(filter.Name))
+                        bool isSelected = i == selectedIndex;
+                        Color backColor = isSelected ? Color.green : Color.white;
+                        using (new GUIBackgroundColorScope(backColor))
                         {
-                            selectedIndex = i;
+                            bool click = GUI.Button(box, GUIContent.none, "Box");
+                            if (click)
+                            {
+                                selectedIndex = i;
+                            }
+                            GUILayout.Box(filter.Name, GUILayout.ExpandWidth(true));
+                            
+                            if (GUILayout.Button("Edit", GUILayout.Width(50)))
+                            {
+                                AddFliterWindow.Edit(filter);
+                            }
+
+                            if (GUILayout.Button("Save", GUILayout.Width(50)))
+                            {
+                            }
+
+                            if (GUILayout.Button("X", GUILayout.Width(25)))
+                            {
+                                filters[i] = null;
+                            }
+
+                            EditorGUILayout.EndHorizontal();
+                            EditorGUILayout.Space();
+                            i++;
                         }
+                        
                     }
-                    if (GUILayout.Button("Edit", GUILayout.Width(50)))
-                    {
-                        AddFliterWindow.Edit(filter);
-                    }
-
-                    if (GUILayout.Button("Save", GUILayout.Width(50)))
-                    {
-                    }
-
-                    if (GUILayout.Button("X", GUILayout.Width(25)))
-                    {
-                        filters[i] = null;
-                    }
-
-                    EditorGUILayout.EndHorizontal();
-                    EditorGUILayout.Space();
-                    i++;
+                    
                 }
             }
         }
